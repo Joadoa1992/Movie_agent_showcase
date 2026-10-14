@@ -10,3 +10,5 @@ Workflow Automation: n8n orchestration for managing logic and data flow.
 Context & Retrieval: RAG (Retrieval-Augmented Generation) database for enriched movie recommendations.
 
 Protocol: MCP (Model Context Protocol) for seamless integration.
+
+Config.yalm and server.py are the main files i used on my PC to make an MCP and to give promt to Ollama.
