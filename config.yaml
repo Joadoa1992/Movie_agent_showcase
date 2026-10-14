@@ -1,0 +1,216 @@
+system_prompt: |
+  You are a helpful movie recommendation assistant connected to a movie database pipeline.
+
+  OPERATING RULES:
+  1. When asked for any movie recommendation or search, ALWAYS execute the `mcp__local_helper__search_movies_hybrid_rag` tool using the user's query.
+  2. The tool returns a fully formatted answer. Relay this answer directly to the user without adding or inventing extra movies.
+  3. If the tool response indicates no movies were found, inform the user accordingly.
+
+  EXAMPLE TOOL CALL:
+  User: Suggest short action movies under 100 minutes.
+  Tool Call: {"name": "mcp__local_helper__search_movies_hybrid_rag", "arguments": {"query": "short action movies under 100 minutes"}}
+  
+model:
+  api_key: ollama
+  base_url: http://127.0.0.1:11434/v1
+  default: llama3.2
+  provider: ollama-launch
+  context_length: 65536
+  ollama_num_ctx: 65536
+  temperature: 0.0
+auxiliary:
+  enabled: false
+providers:
+  ollama-launch:
+    api: http://127.0.0.1:11434/v1
+    default_model: llama3.2
+    models:
+      - hermes3:8b
+      - nomic-embed-text:latest
+      - qwen3:8b-strict
+      - lukaspetrik/gemma3-tools:4b
+      - gemma3:4b
+      - llama3.2:latest
+    name: Ollama
+tools:
+  tool_search:
+    enabled: false
+toolsets:
+  - local-helper
+
+database:
+  journal_mode: wal
+runtime:
+  nofile_soft_limit: 4096
+agent:
+  max_turns: 500
+  personalities: {}
+  reasoning_effort: null
+  verbose: false
+terminal:
+  backend: local
+  cwd: .
+  timeout: 180
+  home_mode: auto
+  container_cpu: 1
+  container_memory: 5120
+  container_disk: 51200
+  container_persistent: true
+  docker_mount_cwd_to_workspace: false
+  lifetime_seconds: 300
+browser:
+  inactivity_timeout: 120
+  extension_control:
+    enabled: false
+tool_loop_guardrails:
+  warnings_enabled: true
+  hard_stop_enabled: false
+  warn_after:
+    exact_failure: 2
+    same_tool_failure: 3
+    idempotent_no_progress: 2
+  hard_stop_after:
+    exact_failure: 5
+    same_tool_failure: 8
+    idempotent_no_progress: 5
+compression:
+  enabled: true
+  checkpoint_required: false
+  progress_notices: false
+  threshold: 0.5
+  target_ratio: 0.2
+  protect_last_n: 20
+  min_tail_user_messages: 1
+  max_attempts: 3
+  proactive_prune_tokens: 0
+  proactive_prune_min_result_chars: 8000
+  proactive_prune_min_reclaim_tokens: 4096
+  protect_first_n: 3
+  codex_gpt55_autoraise: true
+  codex_app_server_auto: native
+  codex_responses_native: false
+  codex_responses_compact_threshold: 200000
+  idle_compact_after_seconds: 0
+prompt_caching:
+  cache_ttl: 5m
+display:
+  compact: false
+  busy_input_mode: interrupt
+  bell_on_complete: false
+  show_reasoning: false
+  background_process_notifications: concise
+  streaming: true
+  skin: default
+  interim_assistant_messages: true
+  busy_ack_detail: true
+  cleanup_progress: false
+  long_running_notifications: true
+  tool_progress: all
+stt:
+  enabled: false
+  language: en
+  local:
+    model: base
+  openai:
+    model: whisper-1
+    language: ''
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+  memory_char_limit: 2200
+  user_char_limit: 1375
+  nudge_interval: 10
+delegation:
+  max_iterations: 250
+skills:
+  creation_nudge_interval: 15
+kanban:
+  review_dispatch: true
+code_execution:
+  max_tool_calls: 50
+  timeout: 300
+streaming:
+  enabled: false
+telemetry:
+  shared_metrics:
+    enabled: false
+updates:
+  pre_update_backup: false
+  backup_keep: 5
+  non_interactive_local_changes: stash
+_config_version: 39
+group_sessions_per_user: true
+platform_toolsets:
+  telegram:
+    - local-helper
+  cli:
+    - kanban
+    - memory
+  discord:
+    - hermes-discord
+  google_chat:
+    - hermes-google_chat
+  homeassistant:
+    - hermes-homeassistant
+  qqbot:
+    - hermes-qqbot
+  signal:
+    - hermes-signal
+  slack:
+    - hermes-slack
+  teams:
+    - hermes-teams
+  whatsapp:
+    - hermes-whatsapp
+  yuanbao:
+    - hermes-yuanbao
+platforms:
+  telegram:
+    enabled: true
+    token: YOUR_NEW_SECRET_BOT_TOKEN_FROM_BOTFATHER
+session_reset:
+  at_hour: 4
+  idle_minutes: 1440
+  mode: none
+mcp_servers:
+  local-helper:
+    command: C:/Users/Joaki/AppData/Local/Programs/Python/Python311/python.exe
+    args:
+      - C:/Users/Joaki/AppData/Local/hermes/mcp-movie-wrapper/server.py
+    env:
+      N8N_WEBHOOK_URL: http://localhost:5678/webhook/movie-hybrid-rag
+known_plugin_toolsets:
+  cli:
+    - a2a
+    - spotify
+known_builtin_toolsets:
+  cli:
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - context_engine
+    - cronjob
+    - delegation
+    - discord
+    - discord_admin
+    - file
+    - homeassistant
+    - image_gen
+    - memory
+    - session_search
+    - skills
+    - spotify
+    - stt
+    - terminal
+    - todo
+    - tts
+    - video
+    - video_gen
+    - vision
+    - web
+    - x_search
+    - yuanbao
+onboarding:
+  seen:
+    busy_input_prompt: true
